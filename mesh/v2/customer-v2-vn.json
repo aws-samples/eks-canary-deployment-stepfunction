@@ -1,0 +1,23 @@
+{
+  "meshName": "demomesh",
+
+  "virtualNodeName": "customer-v2-vn",
+
+  "spec": {
+    "listeners": [
+      {
+        "portMapping": {
+          "port": 8080,
+          "protocol": "http"
+        }
+      }
+    ],
+
+    "serviceDiscovery": {
+      "dns": {
+        "hostname": "customer-v2.default.svc.cluster.local"
+      }
+
+    }
+  }
+}

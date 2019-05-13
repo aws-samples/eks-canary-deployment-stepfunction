@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: product-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        microsvc: product-v2
+    spec:
+      containers:
+      - name: product
+        image: pahud/aws-appmesh-refarch-service:latest
+        imagePullPolicy: Always
+        env:       
+        - name: "serviceName"
+          value: "Product"                  
+        - name: "versionNum"
+          value: "2.0"                  
+        ports:
+        - name: product
+          containerPort: 8080
+      - name: envoy
+        image: 111345817488.dkr.ecr.us-west-2.amazonaws.com/aws-appmesh-envoy:v1.9.1.0-prod
+        securityContext:
+          runAsUser: 1337
+        env:
+          - name: "APPMESH_VIRTUAL_NODE_NAME"
+            value: "mesh/demomesh/virtualNode/product-vn"
+          - name: "ENVOY_LOG_LEVEL"
+            value: "info"
+          - name: "AWS_REGION"
+            value: "ap-south-1"
+      initContainers:
+        - name: proxyinit
+          image: 111345817488.dkr.ecr.us-west-2.amazonaws.com/aws-appmesh-proxy-route-manager:v2
+          securityContext:
+            capabilities:
+              add: 
+                - NET_ADMIN
+          env:
+            - name: "APPMESH_START_ENABLED"
+              value: "1"
+            - name: "APPMESH_IGNORE_UID"
+              value: "1337"
+            - name: "APPMESH_ENVOY_INGRESS_PORT"
+              value: "15000"
+            - name: "APPMESH_ENVOY_EGRESS_PORT"
+              value: "15001"
+            - name: "APPMESH_APP_PORTS"
+              value: "8080"
+            - name: "APPMESH_EGRESS_IGNORED_IP"
+              value: "169.254.169.254"          
+---          
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-v2
+  labels:
+    microsvc: product-v2
+spec:
+  selector:
+    microsvc: product-v2
+  type: ClusterIP
+  ports:
+   - port: 8080
+     name: http
+     targetPort: 8080
+     protocol: TCP 

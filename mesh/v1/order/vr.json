@@ -1,0 +1,16 @@
+{
+  "meshName": "demomesh",
+
+  "virtualRouterName": "order-vr",
+
+  "spec": {
+    "listeners": [
+      {
+        "portMapping": {
+          "port": 8080,
+          "protocol": "http"
+        }
+    }
+    ]
+  }
+}

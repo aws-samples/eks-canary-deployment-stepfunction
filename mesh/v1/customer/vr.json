@@ -1,0 +1,16 @@
+{
+  "meshName": "demomesh",
+
+  "virtualRouterName": "customer-vr",
+
+  "spec": {
+    "listeners": [
+      {
+        "portMapping": {
+          "port": 8080,
+          "protocol": "http"
+        }
+    }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+    "spec": {
+        "provider": {
+            "virtualRouter": {
+                "virtualRouterName": "customer-vr"
+            }
+        }
+    },
+    "virtualServiceName": "customer.default.svc.cluster.local"
+}

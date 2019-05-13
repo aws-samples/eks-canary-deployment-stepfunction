@@ -1,0 +1,23 @@
+{
+    "meshName": "demomesh",
+
+    "virtualRouterName": "product-vr",
+
+    "routeName": "product-r",
+
+    "spec": {
+        "httpRoute": {
+            "action": {
+                "weightedTargets": [
+                    {
+                        "virtualNode": "product-v15-vn",
+                        "weight": 100
+          }
+        ]
+            },
+            "match": {
+                "prefix": "/"
+            }
+        }
+    }
+}
