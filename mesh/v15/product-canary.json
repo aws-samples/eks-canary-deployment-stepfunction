@@ -11,11 +11,11 @@
         "weightedTargets": [
           {
             "virtualNode": "product-vn",
-            "weight": 0
+            "weight": 50
           },
           {
             "virtualNode": "product-v15-vn",
-            "weight": 100
+            "weight": 50
           }
         ]
       },
