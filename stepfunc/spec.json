@@ -1,0 +1,210 @@
+{
+    "StartAt": "Here We Go",
+    "States": {
+        "Here We Go": {
+            "Type": "Pass",
+            "Result": "Hello World!",
+            "Next": "Canary 10"
+        },
+
+        "Canary 10": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait10",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait10": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 20"
+        },
+
+        "Canary 20": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait20",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait20": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 30"
+        },
+
+        "Canary 30": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait30",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+
+        "Wait30": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 40"
+        },
+
+        "Canary 40": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait40",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait40": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 50"
+        },
+
+        "Canary 50": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait50",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait50": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 60"
+        },
+
+        "Canary 60": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait60",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait60": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 70"
+        },
+
+        "Canary 70": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait70",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait70": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 80"
+        },
+        "Canary 80": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait80",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait80": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 90"
+        },
+
+        "Canary 90": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "Wait90",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+        "Wait90": {
+            "Type": "Wait",
+            "Seconds": 10,
+            "Next": "Canary 100"
+        },
+
+
+        "Canary 100": {
+            "Type": "Task",
+            "InputPath": null,
+            "Resource": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-SampleFunction-1GVNOT8HW76IN:$LATEST",
+            "Next": "DONE",
+            "Catch": [{
+                "ErrorEquals": [
+                    "States.ALL"
+                ],
+                "Next": "Roll Back"
+            }]
+        },
+
+
+        "DONE": {
+            "Type": "Pass",
+            "Result": "DONE",
+            "End": true
+        },
+
+        "Roll Back": {
+            "Type": "Pass",
+            "Result": "DONE",
+            "End": true
+        }
+
+    }
+
+}

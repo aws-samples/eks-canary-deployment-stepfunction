@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Amazon EKS Canary Deployment Lambda function
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main
+      CodeUri: ./func.d
+      Runtime: provided
+      Layers:
+        - !Sub "arn:aws:lambda:ap-south-1:903779448426:layer:layer-awscli-layer-stack:1"
+      MemorySize: 512
+      Policies: 
+        - AWSLambdaBasicExecutionRole
+        - AWSAppMeshFullAccess
+      Timeout: 10
+      
+Outputs:
+  FunctionArn:
+    Description: Function ARN
+    Value: !GetAtt Function.Arn
