@@ -345,21 +345,138 @@ Have fun!
 
 
 
+# Step Function Integration for Automated Canary Deployment
+
+You may build your state machine with AWS Step Function for automated canary deployment. For example, 10% incremental traffic every 10 minutes until 100% or 10% initial canary traffic for 5min and immediately switch 100% after 10 minutes. AWS Step Functions gives you flexibility to define your canary deployment strategy while Lambda function being invoked by AWS Step Function can update the virtual route on AWS App Mesh for you.
+
+![](images/WX20190514-082743@2x.png)
+
+
+
+![](images/WX20190514-082958@2x.png)
+
+
+
+## Step 1 - Prepare Your Lambda function
+
+We are going to build our own [aws-lambda-layer-awscli](https://github.com/aws-samples/aws-lambda-layer-awscli) from scratch
+
+```
+cd stepfunc/lambda/
+make build layer-zip layer-upload layer-publish
+```
+
+Response
+
+```
+{
+    "LayerVersionArn": "arn:aws:lambda:ap-south-1:903779448426:layer:awscli-layer:23", 
+    "Description": "awscli-layer", 
+    "CreatedDate": "2019-05-14T05:18:40.388+0000", 
+    "LayerArn": "arn:aws:lambda:ap-south-1:903779448426:layer:awscli-layer", 
+    "Content": {
+        "CodeSize": 22977865, 
+        "CodeSha256": "Tg6Yjr99B1MXRSs0uGhSWaTZKdLtob3nHPugfn0eIAs=", 
+        "Location": "..."
+    }, 
+    "Version": 23, 
+    "CompatibleRuntimes": [
+        "provided"
+    ], 
+    "LicenseInfo": "MIT"
+}
+```
+
+Copy the **LayerVersionArn** value string.
+
+update `sam.yaml` and configure the `Layers` with **LayerVersionArn** provided above.
+
+![](images/WX20190514-105347@2x.png)
+
+OK. Let's publish our Lambda function.
+
+update the `Makefile` and define your own parameters such as `S3BUCKET` and `LAMBDA_REGION`. Make sure your current IAM identity has read/write to `S3BUCKET` bucket and `LAMBDA_REGION` is the correct AWS region you are deploying to.
+
+```
+make sam-package sam-deploy
+```
+
+Response
+
+```
+Successfully packaged artifacts and wrote output template to file packaged.yaml.
+Execute the following command to deploy the packaged template
+aws cloudformation deploy --template-file /home/samcli/workdir/packaged.yaml --stack-name <YOUR STACK NAME>
+
+Waiting for changeset to be created..
+Waiting for stack create/update to complete
+Successfully created/updated stack - eks-canary-stack
+# print the cloudformation stack outputs
+aws --region ap-south-1 cloudformation describe-stacks --stack-name "eks-canary-stack" --query 'Stacks[0].Outputs'
+[
+    {
+        "Description": "Function ARN", 
+        "OutputKey": "FunctionArn", 
+        "OutputValue": "arn:aws:lambda:ap-south-1:903779448426:function:eks-canary-stack-Function-8BYBEJIPXV6D"
+    }
+]
+```
+
+Now your lambda function is deployed. Copy the **FunctionArn** value above.
+
+
+
+## Step 2 - Prepare Your State Machine in Step Function
+
+Create a new step function with the provided spec JSON [here](https://github.com/pahud/aws-appmesh-eks-refarch/blob/master/stepfunc/spec.json). Make sure update the Task Resource arn to your own Lambda function arn above.
+
+
+
+## Step 3 - Monitoring
+
+Before we execute the state machine, let's monitor our application with two seperate tabs or windows.
+
+
+
+In the 1st tab we monitor the different weighted targets in the product virtual route with `watch -n1`.  The result will refresh every second.
+
+```
+$ watch -n1 aws appmesh describe-route --mesh-name demomesh --route-name product-r --virtual-router-name product-vr --query "route.spec.httpRoute.action.weightedTargets" --output table
+------------------------------
+|        DescribeRoute       |
++-----------------+----------+
+|   virtualNode   | weight   |
++-----------------+----------+
+|  product-vn     |  100     |
+|  product-v15-vn |  0       |
++-----------------+----------+
+```
+
+In the 2nd tab we keep curling on the ELB of the order service.
+
+![](images/WX20190514-111847@2x.png)
 
 
 
 
 
+## Step 4 - Execute the State Machine
+
+OK let's execute the state machine in step function. Watch the state machine in the step function console.
+
+![](images/WX20190514-082743@2x.png)
 
 
 
+And also watch the changes of the two tabs.
+
+![](images/WX20190514-083514@2x.png)
 
 
 
+## Conclusion
 
-
-
-
+In this demo, we walks you through how to build a customized Amaozn EKS canary deployment with AWS Step Function, AWS Lambda and AWS App Mesh. I hope you enjoy it and customize your own deployment logic based on it.
 
 
 
