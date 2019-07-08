@@ -1,8 +1,5 @@
-# aws-appmesh-eks-refarch
-
-This repository demonstrates how to deploy microservices on top of AWS App Mesh and Amazon EKS cluster.
-
-
+# eks-canary-deployment-stepfunction
+Reference Architecture of Canary Deployment with Amazon EKS and AWS Step Functions
 
 ## Architecture Overview
 
@@ -477,32 +474,3 @@ And also watch the changes of the two tabs.
 ## Conclusion
 
 In this demo, we walks you through how to build a customized Amaozn EKS canary deployment with AWS Step Function, AWS Lambda and AWS App Mesh. I hope you enjoy it and customize your own deployment logic based on it.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
