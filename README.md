@@ -1,4 +1,4 @@
-## Eks Canary Deployment Stepfunction
+## Amazon Canary Deployment with AWS Step Function
 
 Reference Architecture of Canary Deployment with Amazon EKS and AWS Step Functions
 
